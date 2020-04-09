@@ -3,40 +3,47 @@
 @section('content')
     <div class="movie-info border-b border-gray-800">
         <div class="container mx-auto px-4 py-16 flex flex-col md:flex-row">
-            <img src="/images/parasite.jpg" alt="parasite" class="w-64 w-96">
+            <img src={{ "https://image.tmdb.org/t/p/w500/".$movie['poster_path'] }} alt="parasite" class="w-64 lg:w-96">
             <div class="md:ml-24">
-                <h2 class="text-4xl font-semibold">Parasite (2019)</h2>
+            <h2 class="text-4xl font-semibold">{{ $movie['original_title'] }}</h2>
                 <div class="flex flex-wrap items-center text-gray-400 text-sm">
                     <span>Rating</span>
-                    <span class="ml-1">85%</span>
+                    <span class="ml-1">{{ $movie['vote_average'] * 10 . "%"}}</span>
                     <span class="mx-2">|</span>
-                    <span>Feb 20, 2020</span>
+                    <span>{{ \Carbon\Carbon::parse($movie['release_date'])->format("M d, Y")}}</span>
                     <span class="mx-2">|</span>
-                    <span>Action, Thriller, Drama</span>
+                    <span>
+                        @foreach ($movie['genres'] as $genre)
+                            {{ $genre['name'] }} @if (!$loop->last),  @endif                                
+                        @endforeach
+                    </span>
 
                 </div>
                 <p class="text-gray-300 mt-8">
-                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quia fuga sequi nihil dignissimos magnam odio natus iste qui tempora veniam alias dolores, tempore, aperiam sit, voluptatibus autem earum repudiandae dolorem iure delectus magni debitis nostrum. Totam, eius adipisci recusandae maxime quam commodi? Temporibus animi deserunt corrupti, adipisci ex minus tenetur!
+                    {{ $movie['overview']}}
                 </p>
 
                 <div class="mt-12">
                     <h4 class="text-white font-semibild">Featured Cast</h4>
                     <div class="flex mt-4">
-                        <div>
-                            <div>Bong Joon-ho</div>
-                            <div class="text-sm text-gray-400">Screenplay, Director, Stroy</div>
-                        </div>
-                        <div class="ml-8">
-                            <div>Ha Ji-won</div>
-                            <div class="text-sm text-gray-400">Screenplay</div>
-                        </div>
+                        @foreach ($movie['credits']['crew'] as $crew)
+                        @if ( $loop->index < 2 )
+                            <div class="mr-8">
+                                <div> {{ $crew['name']}} </div>
+                                <div class="text-sm text-gray-400">{{ $crew['job']}}</div>
+                            </div>
+                        @endif
+                        @endforeach
                     </div>
                 </div>
-
-                <div class="mt-12">
-                    <button class="flex items-center bg-orange-500 text-gray-900 rounded font-semibold px-5 py-4 hover:bg-orange-600 transition duration-150 ease-in-out">
-                        Play Trailer</button>
-                </div>
+                
+                @if (count($movie['videos']['results']) > 0)
+                    
+                    <div class="mt-12">
+                    <a href="http://youtube.com/watch?v={{ $movie['videos']['results'][0]['key'] }}" class="flex inline-flex items-center bg-orange-500 text-gray-900 rounded font-semibold px-5 py-4 hover:bg-orange-600 transition duration-150 ease-in-out">
+                            Play Trailer</a>
+                    </div>
+                @endif
             </div>
         </div>
         
@@ -44,53 +51,44 @@
             <div class="container mx-auto py-16 px-4">
                 <h2 class="font-semibold text-4xl">Cast</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-16">
-                    <div class="mt-8">
-                        <a href="#">
-                            <img src="/images/parasite.jpg" alt="sci-fi" class="hover:opacity-75 transition ease-in-out duration-150">
-                        </a>
-                        <div class="mt-2">
-                            <a href="#" class="text-lg mt-2 hover:text-gray-300">Parasite</a>
-                        </div>
-                    </div>
-                    <div class="mt-8">
-                        <a href="#">
-                            <img src="/images/parasite.jpg" alt="sci-fi" class="hover:opacity-75 transition ease-in-out duration-150">
-                        </a>
-                        <div class="mt-2">
-                            <a href="#" class="text-lg mt-2 hover:text-gray-300">Hero Name</a>
-                    
-                        </div>
-                    </div>
-                    <div class="mt-8">
-                        <a href="#">
-                            <img src="/images/parasite.jpg" alt="sci-fi" class="hover:opacity-75 transition ease-in-out duration-150">
-                        </a>
-                        <div class="mt-2">
-                            <a href="#" class="text-lg mt-2 hover:text-gray-300">Hero Name
+                    @foreach ($movie['credits']['cast'] as $cast)
+                    @if ( $loop->index < 5 )
+                        <div class="mt-8">
+                            <a href="#">
+                            <img src="{{ 'https://image.tmdb.org/t/p/w300/'.$cast['profile_path']}}" alt="sci-fi" class="hover:opacity-75 transition ease-in-out duration-150">
                             </a>
-                            
+                            <div class="mt-2">
+                                <a href="#" class="text-lg mt-2 hover:text-gray-300">{{ $cast['name']}}</a>
+                            <div class="text-sm text-gray-400">{{$cast['character']}}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="mt-8">
-                        <a href="#">
-                            <img src="/images/parasite.jpg" alt="sci-fi" class="hover:opacity-75 transition ease-in-out duration-150">
-                        </a>
-                        <div class="mt-2">
-                            <a href="#" class="text-lg mt-2 hover:text-gray-300">Hero Name</a>
-                            
-                        </div>
-                    </div>
-                    <div class="mt-8">
-                        <a href="#">
-                            <img src="/images/parasite.jpg" alt="sci-fi" class="hover:opacity-75 transition ease-in-out duration-150">
-                        </a>
-                        <div class="mt-2">
-                            <a href="#" class="text-lg mt-2 hover:text-gray-300">Hero Name</a>
                         
-                        </div>
-                    </div>
+                    @endif
+                    @endforeach
+                    
             </div>
             
+        </div>
+
+        <div class="movie-images">
+            <div class="container mx-auto py-16 px-4">
+                <h2 class="text-4xl font-semibold">Images</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+                    @foreach ($movie['images']['backdrops'] as $image)
+                        @if ( $loop->index < 9 )
+                        
+                            <div class="mt-8">
+                                <a href="#">
+                                    <img src="{{ 'http://images.tmdb.org/t/p/w500'.$image['file_path']}}" alt="Image1"
+                                        class="hover:opacity-75 transition ease-in-out duration-150"
+                                    >
+                                </a>
+                            </div>
+                            
+                        @endif
+                    @endforeach
+                </div>
+            </div>
         </div>
     </div> 
 @endsection
