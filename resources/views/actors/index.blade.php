@@ -10,26 +10,50 @@
             @foreach ($popularActors as $actor)
                 
                 <div class="actor mt-8">
-                    <a href="">
+                    <a href={{ route("actors.show", $actor['id'])}}>
                         <img src="{{ $actor['profile_path'] }}" alt="Profile Image" class="hover:opacity-75 transition ease-in-out duration-150">
                     </a>
                     <div class="mt-2">
-                        <a href="#" class="text-lg hover:text-gray-300">{{ $actor['name'] }}</a>
+                        <a href={{ route("actors.show", $actor['id'])}} class="text-lg hover:text-gray-300">{{ $actor['name'] }}</a>
                         <div class="text-sm truncate text-gray-4000">{{ $actor['known_for'] }} </div>
                     </div>
                 </div>
                 
             @endforeach
         </div>
-        <div class="flex justify-between mt-16">
+        <div class="page-load-status my-8">
+            <p class="infinite-scroll-request">Loading...</p>
+            <p class="infinite-scroll-last">End of content</p>
+            <p class="infinite-scroll-error">No more pages to load</p>
+          </div>
+        {{-- <div class="flex justify-between mt-16">
             @if ($previous)
                 <a href="/actors/page/{{$previous}}">Previous</a>
+
+            @else
+                <div></div>
             @endif
 
             @if ($next)
                 <a href="/actors/page/{{$next}}">Next</a>
+            @else
+                <div></div>
             @endif
-        </div>
+        </div> --}}
     </div>
 
+@endsection
+
+@section('scripts')
+    <script src="https://unpkg.com/infinite-scroll@3/dist/infinite-scroll.pkgd.min.js"></script>
+    <script>
+        var elem = document.querySelector('.grid');
+        var infScroll = new InfiniteScroll( elem, {
+        // options
+        path: "/actors/page/@{{#}}",
+        append: '.actor',
+        // history: false,
+        status: '.page-load-status'
+        });
+    </script>
 @endsection
