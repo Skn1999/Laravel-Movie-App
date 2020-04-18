@@ -1,42 +1,25 @@
 <?php
 
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use App\ViewModels\ActorsViewModel;
 
-class MovieController extends Controller
+class ActorsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($page = 1)
     {
         //
-        $popularMovies = Http::withToken(config('services.tmdb.token'))->get('http://api.themoviedb.org/3/movie/popular')->json()['results'];
+        $popularActors = Http::withToken(config('services.tmdb.token'))->get('http://api.themoviedb.org/3/person/popular?page='.$page)->json()['results'];
 
-        $nowPlayingMovies = Http::withToken(config('services.tmdb.token'))->get('http://api.themoviedb.org/3/movie/now_playing')->json()['results'];
-
-        $genres = Http::withToken(config('services.tmdb.token'))->get('http://api.themoviedb.org/3/genre/movie/list')->json()['genres'];
-
-        // $genres = collect($genreList)->mapWithKeys(function($genre){
-        //     return [ $genre['id'] => $genre['name']];
-        // });
-        
-        // return view("layouts.index", [
-        //     "popularMovies" => $popularMovies,
-        //     'nowPlayingMovies' => $nowPlayingMovies,
-        //     "genres" => $genres
-        // ]);
-        $viewModel = new \App\ViewModels\MoviesViewModel(
-            $popularMovies,
-            $nowPlayingMovies,
-            $genres
-        );
-        return view("layouts.index", $viewModel);
+        $viewModel = new ActorsViewModel($popularActors, $page);
+        return view("actors.index", $viewModel);
     }
 
     /**
@@ -69,14 +52,6 @@ class MovieController extends Controller
     public function show($id)
     {
         //
-        $movie = Http::withToken(config('services.tmdb.token'))
-                ->get('http://api.themoviedb.org/3/movie/'.$id."?append_to_response=credits,videos,images")
-                ->json();
-
-        $viewModel = new \App\ViewModels\MovieViewModel(
-            $movie
-        );
-        return view("layouts.show", $viewModel);
     }
 
     /**
