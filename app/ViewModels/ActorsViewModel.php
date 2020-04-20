@@ -30,7 +30,7 @@ class ActorsViewModel extends ViewModel
 
             ])->only([
                  "id", "name", "profile_path", "known_for", 
-            ])->dump();
+            ]);
         });
 
     }

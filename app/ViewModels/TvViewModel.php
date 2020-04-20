@@ -30,7 +30,7 @@ class TvViewModel extends ViewModel
             $genresFormatted = collect($tvShow['genre_ids'])->mapWithKeys( function($value){
                 return [$value => $this->genres()->get($value)];
             })->implode(", ");
-            
+
             return collect($tvShow)->merge([
                 "poster_path" => "https://image.tmdb.org/t/p/w500/".$tvShow['poster_path'],
                 "vote_average" => $tvShow['vote_average'] * 10 . "%",
@@ -39,7 +39,7 @@ class TvViewModel extends ViewModel
             ])->only([
                 "poster_path", "id", "genre_ids","name", "vote_average", "overview", "first_air_date", "genres"
             ]);
-        })->dump();
+        });
     }
 
     public function popularTv(){
